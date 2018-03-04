@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int numtecla;
 
-    private int operation, dotCount=0, symCount=0, returnValueResult;
+    private int operation, dotCount=0, symCount=0, returnValueResult=1, eCount=0;
     private float op1, op2, opResult;
     private String returnValue="", symbolOp;
 
@@ -59,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
                         op2=0;
                         opResult=0;
                         returnValue="";
-                        returnValueResult=1;
+                        returnValueResult=3;
                         symbolOp="";
                         dotCount=0;
                         symCount=0;
+                        eCount=0;
 
                     }
                 }
@@ -77,25 +78,37 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(View view) {
                            /* addNewNumber(((TextView)view).getText().toString(),"1");
                             returnValue=returnValue+((TextView)view).getText().toString();*/
-
-                                if(((TextView)view).getText().toString().equals(".") && dotCount>=1) {
-                                    dotCount=dotCount+1;
-                                    returnValue=returnValue+"";
-                                }else  if(((TextView)view).getText().toString().equals(".")){
-
-                                    addNewNumber(((TextView)view).getText().toString(),"1");
-                                    returnValue=returnValue+((TextView)view).getText().toString();
-                                    Toast.makeText(MainActivity.this, returnValue, Toast.LENGTH_LONG).show();
-
-                                    dotCount=dotCount+1;
-                                }else{
-                                    addNewNumber(((TextView)view).getText().toString(),"1");
-                                    returnValue=returnValue+((TextView)view).getText().toString();
-                                    Toast.makeText(MainActivity.this, returnValue, Toast.LENGTH_LONG).show();
+                           if(returnValue.equals("0") && ((TextView)view).getText().toString().equals("0") ){
+                               returnValue="0";
+                               result.setText("0");
 
 
+                           }else if(returnValue.equals("0") && !((TextView)view).getText().toString().equals(".")) {
 
-                                }
+                               returnValue=((TextView)view).getText().toString();
+                               addNewNumber(((TextView) view).getText().toString(), "1");
+
+
+                           }
+
+                               else{
+
+                               if (((TextView) view).getText().toString().equals(".") && dotCount >= 1) {
+                                   dotCount = dotCount + 1;
+                                   returnValue = returnValue + "";
+                               } else if (((TextView) view).getText().toString().equals(".")) {
+
+                                   addNewNumber(((TextView) view).getText().toString(), "1");
+                                   returnValue = returnValue + ((TextView) view).getText().toString();
+
+                                   dotCount = dotCount + 1;
+                               } else {
+                                   addNewNumber(((TextView) view).getText().toString(), "1");
+                                   returnValue = returnValue + ((TextView) view).getText().toString();
+
+
+                               }
+                           }
                             //Toast.makeText(MainActivity.this, returnValue, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -110,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                             if(symCount>=1) {
-                                symCount = symCount + 1;
+
                             }
 
                              else{
@@ -136,35 +149,73 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        op2=Float.parseFloat(returnValue);
+
+                        //Toast.makeText(MainActivity.this, returnValue, Toast.LENGTH_LONG).show();
+
+                        if(eCount>=1){
+
+                            eCount=1;
+                        }
+                        else if(symCount==1 && returnValue.equals("")==false) {
                         addNewNumber(((TextView)view).getText().toString(),"1");
-                        switch (symbolOp){
+                            op2=Float.parseFloat(returnValue);
+
+
+
+                            switch (symbolOp) {
                             case "-":
-                                opResult=op1-op2;
+                                opResult = op1 - op2;
+                                result.setText(Float.toString(opResult));
+                                returnValue = "";
+                                op2=0;
+                                returnValueResult = 1;
 
                                 break;
                             case "+":
-                                opResult=op1+op2;
+                                opResult = op1 + op2;
+                                result.setText(Float.toString(opResult));
+                                returnValue = "";
+                                op2=0;
+                                returnValueResult = 1;
 
                                 break;
 
                             case "*":
-                                opResult=op1*op2;
+                                opResult = op1 * op2;
+                                result.setText(Float.toString(opResult));
+                                returnValue = "";
+                                op2=0;
+                                returnValueResult = 1;
 
                                 break;
 
                             case "/":
-                                opResult=op1/op2;
+                                opResult = op1 / op2;
+                                result.setText(Float.toString(opResult));
+                                returnValue = "";
+                                op2=0;
+                                returnValueResult = 1;
+
 
                                 break;
+                            default:
 
 
+                                returnValue = "";
+                                op2=0;
+                                returnValueResult = 1;
+
+                                break;
+                        }
+
+                        eCount=1;
+                        }else{
+
+                            //Toast.makeText(MainActivity.this, returnValue, Toast.LENGTH_LONG).show();
 
                         }
 
-                        result.setText(Float.toString(opResult));
-                        returnValue="";
-                        returnValueResult=1;
+
 
 
 
@@ -181,21 +232,75 @@ public class MainActivity extends AppCompatActivity {
 
         TextView result=(TextView) findViewById(R.id.result);
 
-        String numDefault=result.getText().toString();
-        if(numDefault.equals("0") || returnValueResult==1){
-            numDefault = "";
-            returnValueResult=0;
-        }
-        numDefault=numDefault+number;
+        String numDefault1=result.getText().toString();;
+
+
+        String numDefault;
 
         if(cl.equals("0")){
-            result.setText("0");
+            numDefault = "";
+            returnValueResult = 0;
+            symCount = 0;
+            returnValue="";
+            eCount=0;
+            numDefault = numDefault + number;
+            result.setText(numDefault);
+
+
+
+
+
 
 
         }else {
-            result.setText(numDefault);
+           numDefault=result.getText().toString();
+
+           if(numDefault1.equals("0")){
+
+               if(number.equals("+") || number.equals("-") || number.equals("*") || number.equals("/") || number.equals(".") ) {
+                   numDefault = numDefault + number;
+                   result.setText(numDefault);
+               }else{
+
+                   numDefault = "";
+                   returnValueResult = 0;
+                   symCount = 0;
+                   eCount=0;
+                   numDefault = numDefault + number;
+                   result.setText(numDefault);
+               }
+
+           }
+
+            else if(numDefault.equals("0") && returnValueResult==1) {
+                numDefault = "";
+                returnValueResult = 0;
+                symCount = 0;
+               eCount=0;
+
+               numDefault = numDefault + number;
+                result.setText(numDefault);
+
+
+            }else if(returnValueResult==1) {
+
+                numDefault = "";
+                returnValueResult = 0;
+                symCount = 0;
+               eCount=0;
+
+               numDefault = numDefault + number;
+                result.setText(numDefault);
+
+            }
+
+        else{
+            numDefault = numDefault + number;
+
+            result.setText(numDefault);}
 
         }
+
         return numDefault;
     }
 
